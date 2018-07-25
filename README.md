@@ -35,14 +35,6 @@ a.	By default, aws_test.py runs 1000 tests on one file using the single-test arg
 6.	Ran 10000 tests on a single file and measured power usage; avg. = 18w, max = 25w
 
 
-Contents:  
-1.	FPGA power consumption 		(1)
-2.	Command format/notes 		(2)
-3.	Example test outputs 			(3)
-4.	means.py code 			(4)
-5.	Output data 				(5-7)
-6.	Extra					(8-)
-
 ### FPGA power consumption:
 ```fpga-describe-local-image -S 0 -M```
 Average      : 18 watts  
