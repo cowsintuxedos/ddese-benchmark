@@ -44,36 +44,36 @@ Contents:
 6.	Extra					(8-)
 
 # FPGA power consumption:  
-```fpga-describe-local-image -S 0 -M```
-Average      : 18 watts
-Max measured : 25 watts
-Last measured is almost always 18 watts, but sometimes jumps between 18 and 25; the average intermittently changes to 19 watts for a short period, perhaps denoting a cluster of power spikes.
-** Cloned the aws-fpga git repo located at https://github.com/aws/aws-fpga into /deepspeech2 for the power metrics because the version of aws-fpga on this AMI is deprecated.
+```fpga-describe-local-image -S 0 -M```  
+Average      : 18 watts  
+Max measured : 25 watts  
+Last measured is almost always 18 watts, but sometimes jumps between 18 and 25; the average intermittently changes to 19 watts for a short period, perhaps denoting a cluster of power spikes.  
+** Cloned the aws-fpga git repo located at https://github.com/aws/aws-fpga into /deepspeech2 for the power metrics because the version of aws-fpga on this AMI is deprecated.  
 
 
 # Command format: (uses aws_test.py - runs deepspeech2 multiple times on each audio file and outputs the average cpu and fpga runtimes for each file)
-```python aws_test.py --fpga_config deephi/config/fpga_cnnblstm_0.15.json --audio_path data/long_audio/wav/long_audio3.wav --single_test --multi_loop_format |& tee test_output.txt && python means.py | tee -a means_output.txt```
+```python aws_test.py --fpga_config deephi/config/fpga_cnnblstm_0.15.json --audio_path data/long_audio/wav/long_audio3.wav --single_test --multi_loop_format |& tee test_output.txt && python means.py | tee -a means_output.txt```  
 
 
-Explanations:
-```python aws_test.py --fpga_config deephi/config/fpga_cnnblstm_0.15.json --audio_path data/long_audio/wav/long_audio3.wav --single_test```
-Runs the test itself on a single audio file, long_audio3.wav; default number of runs is 1000.
-** The --fpga_config argument is required to display both cpu and cpu+fpga use times.
+Explanations:  
+```python aws_test.py --fpga_config deephi/config/fpga_cnnblstm_0.15.json --audio_path data/long_audio/wav/long_audio3.wav --single_test```  
+Runs the test itself on a single audio file, long_audio3.wav; default number of runs is 1000.  
+** The --fpga_config argument is required to display both cpu and cpu+fpga use times.  
 
-```--multi_loop_format```
-Outputs the results of test in comma-delimited format, which is parsed by means.py; see example test output section for more detail. Remove from command for detailed outputs.
-** Seems to only work with the --single_test argument from above.
+```--multi_loop_format```  
+Outputs the results of test in comma-delimited format, which is parsed by means.py; see example test output section for more detail. Remove from command for detailed outputs.  
+** Seems to only work with the --single_test argument from above.  
 
-```|& tee test_output.txt```
-Outputs the results of all tests for one file to test_output.txt; overwrites test_output.txt with new test results when it reaches new file, after calling means.py.
-Also outputs to console.
+```|& tee test_output.txt```  
+Outputs the results of all tests for one file to test_output.txt; overwrites test_output.txt with new test results when it reaches new file, after calling means.py.  
+Also outputs to console.  
 
-```&& python means.py```
-Parses test_output.txt, and finds the average use times for CPU and FPGA; code for means.py located below.
+```&& python means.py```  
+Parses test_output.txt, and finds the average use times for CPU and FPGA; code for means.py located below.  
 
-```| tee -a means_output.txt```
-Appends the average use times to means_out.txt.
-Also outputs to console.
+```| tee -a means_output.txt```  
+Appends the average use times to means_out.txt.  
+Also outputs to console.  
 
 # Example test output:
 Normal output from running aws_test.py with ```--fpga_config``` and ```--single_test``` arguments:
@@ -101,23 +101,23 @@ Shortened output when adding the ```--multi_loop_format``` argument:
 ```
 1256,0.037392377853393555,0.44629526138305664,0.00014209747314453125,9.369850158691406e-05,0.00014472007751464844,0.48421573638916016,0.518734,1.487
 0.04261279106140137,0.0009109973907470703,0.00010657310485839844,0.00013756752014160156,0.043863534927368164,0.078382,0.166
-```
-** This is the same as above, just without the formatting, and with the totals appended as the last value; much easier to parse. First line is CPU values, second line is FPGA values.
-** --multi_loop_format seems to only work with the --single_test argument.
+```  
+** This is the same as above, just without the formatting, and with the totals appended as the last value; much easier to parse. First line is CPU values, second line is FPGA values.  
+** --multi_loop_format seems to only work with the --single_test argument.  
 
  
 # Data: 
-25 tests per file:
-Average speedup for short audio files (<1 s): 3.983x
-Average speedup for middle audio files (1-2 s): 5.674x
-Average speedup for long audio files (>2 s): 7.629x
-100 tests per file:
-Average speedup for short audio files (<1 s): 4.043x
-Average speedup for middle audio files (1-2 s): 6.324x
-Average speedup for long audio files (>2 s): 8.106x
+25 tests per file:  
+Average speedup for short audio files (<1 s): 3.983x  
+Average speedup for middle audio files (1-2 s): 5.674x  
+Average speedup for long audio files (>2 s): 7.629x  
+100 tests per file:  
+Average speedup for short audio files (<1 s): 4.043x  
+Average speedup for middle audio files (1-2 s): 6.324x  
+Average speedup for long audio files (>2 s): 8.106x  
 
-Outputs for 25 tests per file:
-** Each set of 3 outputs below, i.e. CPU use time, FPGA use time, and speedup, corresponds to the decode tests of one file in the directory listed.
+Outputs for 25 tests per file:  
+** Each set of 3 outputs below, i.e. CPU use time, FPGA use time, and speedup, corresponds to the decode tests of one file in the directory listed.  
 ```
 Short audio directory: data/short_audio/wav/ (5 files)
 Average CPU runtime	: 0.164 +- 0.002 seconds
