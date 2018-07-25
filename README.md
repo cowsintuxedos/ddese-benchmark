@@ -2,18 +2,30 @@
 For use with the DeePhi Descartes AMI on AWS at https://aws.amazon.com/marketplace/pp/B079N2J42R?qid=1532541099673
 
 Usage:
+
 SSH into your DeePhi DDESE instance.
+
 sudo bash
+
 source /opt/Xilinx/SDx/2017.1.rte/setup.sh
+
 cd ASR_Accelerator/deepspeech2
+
 source activate test_py3
+
 git clone https://github.com/aws/aws-fpga/
+
 source aws-fpga/sdk_setup.sh
+
 python aws_test.py --fpga_config deephi/config/fpga_cnnblstm_0.15.json --audio_path data/long_audio/wav/long_audio3.wav --single_test --multi_loop_format |& tee test_output.txt && python means.py | tee -a means_output.txt
 
+
 --audio_path argument is path to the audio file, with an upper limit of 3 second duration.
+
 test_output.txt contains the results of the tests; remove the --multi_loop_format argument for verbose detail.
-means_output.txt contains the means of the results. 
+
+means_output.txt contains the means of the results.
+
 
 Summary: 
 Recreated numbers, i.e. average speedup on long audio files (>2 seconds) ~8X; average power usage = 18 watts, max power usage measured = 25 watts. See output data.
