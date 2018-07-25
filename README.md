@@ -2,7 +2,7 @@
 For use with the [DeePhi Descartes AMI on AWS](https://aws.amazon.com/marketplace/pp/B079N2J42R?qid=1532541099673), to compare DDESE on CPU vs CPU+FPGA.
 
 
-# Usage:  
+### Usage:  
 SSH into your DeePhi DDESE instance.  
 ```
 sudo bash  
@@ -19,7 +19,7 @@ python aws_test.py --fpga_config deephi/config/fpga_cnnblstm_0.15.json --audio_p
 ```means_output.txt``` contains the means of the results.  
 
 
-# Summary: 
+### Summary: 
 Recreated numbers, i.e. average speedup on long audio files (>2 seconds) ~8X; average power usage = 18 watts, max power usage measured = 25 watts. See output data.
 
 The DeePhi AMI includes test audio files located in data/short_audio/wav/, data/middle_audio/wav/, and data/long_audio/wav/. Used these in tests below.
@@ -43,39 +43,39 @@ Contents:
 5.	Output data 				(5-7)
 6.	Extra					(8-)
 
-# FPGA power consumption:  
-```fpga-describe-local-image -S 0 -M```  
+### FPGA power consumption:
+```fpga-describe-local-image -S 0 -M```
 Average      : 18 watts  
 Max measured : 25 watts  
 Last measured is almost always 18 watts, but sometimes jumps between 18 and 25; the average intermittently changes to 19 watts for a short period, perhaps denoting a cluster of power spikes.  
 ** Cloned the aws-fpga git repo located at https://github.com/aws/aws-fpga into /deepspeech2 for the power metrics because the version of aws-fpga on this AMI is deprecated.  
 
 
-# Command format: (uses aws_test.py - runs deepspeech2 multiple times on each audio file and outputs the average cpu and fpga runtimes for each file)
+### Command format: 
 ```python aws_test.py --fpga_config deephi/config/fpga_cnnblstm_0.15.json --audio_path data/long_audio/wav/long_audio3.wav --single_test --multi_loop_format |& tee test_output.txt && python means.py | tee -a means_output.txt```  
+(uses aws_test.py - runs deepspeech2 multiple times on each audio file and outputs the average cpu and fpga runtimes for each file)
 
-
-Explanations:  
-```python aws_test.py --fpga_config deephi/config/fpga_cnnblstm_0.15.json --audio_path data/long_audio/wav/long_audio3.wav --single_test```  
+### Explanations:
+```python aws_test.py --fpga_config deephi/config/fpga_cnnblstm_0.15.json --audio_path data/long_audio/wav/long_audio3.wav --single_test```
 Runs the test itself on a single audio file, long_audio3.wav; default number of runs is 1000.  
 ** The --fpga_config argument is required to display both cpu and cpu+fpga use times.  
 
-```--multi_loop_format```  
+```--multi_loop_format```
 Outputs the results of test in comma-delimited format, which is parsed by means.py; see example test output section for more detail. Remove from command for detailed outputs.  
 ** Seems to only work with the --single_test argument from above.  
 
-```|& tee test_output.txt```  
+```|& tee test_output.txt```
 Outputs the results of all tests for one file to test_output.txt; overwrites test_output.txt with new test results when it reaches new file, after calling means.py.  
 Also outputs to console.  
 
-```&& python means.py```  
+```&& python means.py```
 Parses test_output.txt, and finds the average use times for CPU and FPGA; code for means.py located below.  
 
-```| tee -a means_output.txt```  
+```| tee -a means_output.txt```
 Appends the average use times to means_out.txt.  
 Also outputs to console.  
 
-# Example test output:
+### Example test output:
 Normal output from running aws_test.py with ```--fpga_config``` and ```--single_test``` arguments:
 ```
 ===1256th test===
@@ -106,7 +106,7 @@ Shortened output when adding the ```--multi_loop_format``` argument:
 ** --multi_loop_format seems to only work with the --single_test argument.  
 
  
-# Data: 
+### Data: 
 25 tests per file:  
 Average speedup for short audio files (<1 s): 3.983x  
 Average speedup for middle audio files (1-2 s): 5.674x  
