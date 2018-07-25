@@ -1,6 +1,6 @@
 # DeePhi DDESE Benchmark
-For use with the DeePhi Descartes AMI on AWS, to compare DDESE on CPU vs CPU+FPGA.
-https://aws.amazon.com/marketplace/pp/B079N2J42R?qid=1532541099673
+For use with the [DeePhi Descartes AMI on AWS](https://aws.amazon.com/marketplace/pp/B079N2J42R?qid=1532541099673), to compare DDESE on CPU vs CPU+FPGA.
+
 
 # Usage:  
 SSH into your DeePhi DDESE instance.  
